@@ -1,5 +1,15 @@
 <template>
-  <div class="audio-player">
+  <div
+    class="audio-player"
+    :class="{
+      animated: isPlaying,
+    }"
+    :style="{
+      'background-image': audioOptionCoverColorPalette
+        ? `linear-gradient(${audioOptionCoverColorPalette.join(',')})`
+        : '',
+    }"
+  >
     <audio
       ref="audioPlayer"
       :src="getAudioUrl(audioOption.src)"
@@ -32,9 +42,14 @@
     </div>
     <h2 class="audio-player__song">{{ audioOption.title || '' }}</h2>
     <img
+      ref="audioOptionCover"
       alt="Audio cover"
       :src="getAudioImageUrl(audioOption.coverImg ? audioOption.coverImg : '')"
-      :class="`${isPlaying ? 'audio__player-cover-anim' : ''}`"
+      class="audio-player__cover"
+      :class="{
+        animated: isPlaying,
+      }"
+      @load="onAudioOptionCoverLoaded"
     />
     <div class="audio-player__controls">
       <div class="audio-player__controls-item">
@@ -111,6 +126,8 @@ import AppButton from '../AppButton/AppButton.vue';
 import { formatSecondsToTime } from '../../lib/util/formatTime';
 import AppIcon from '../AppIcon/AppIcon.vue';
 import { AudioPlayerOption } from './types';
+import ColorThief from 'colorthief';
+import { rgbaToHex } from '@/shared/lib/util/formatColor';
 
 const AudioPlayerOptionDefault: AudioPlayerOption = {
   src: '',
@@ -142,6 +159,9 @@ export default defineComponent({
   emits: ['end'],
   setup(props) {
     const audioPlayer = ref<HTMLAudioElement>();
+    const audioOptionCover = ref<HTMLImageElement>();
+    const audioOptionCoverColorPalette = ref<string[]>();
+    const colorthief = new ColorThief();
     const progressInterval = 200;
     let timer: any = null;
 
@@ -163,6 +183,14 @@ export default defineComponent({
       }
       return props.audioList[state.currentAudioIndex];
     });
+
+    const onAudioOptionCoverLoaded = async () => {
+      const colorPalette: Array<[number, number, number]> =
+        await colorthief.getPalette(audioOptionCover.value);
+      audioOptionCoverColorPalette.value = colorPalette.map((col) =>
+        rgbaToHex(...col, 0.7),
+      );
+    };
 
     const playUpdate = () => {
       if (state.isDragging || !audioPlayer.value) {
@@ -308,6 +336,8 @@ export default defineComponent({
     };
 
     return {
+      audioOptionCover,
+      audioOptionCoverColorPalette,
       audioPlayer,
       audioOption,
       ...toRefs(state),
@@ -319,6 +349,7 @@ export default defineComponent({
       onAudioPause,
       onAudioPlay,
       onAudioEnded,
+      onAudioOptionCoverLoaded,
       onLoadMetaData,
       playPrevAudio,
       playNextAudio,
@@ -331,11 +362,10 @@ export default defineComponent({
 
 <style scoped lang="scss">
 .audio-player {
-  background-color: #ffff;
-  background-image: url('@/shared/assets/icons/background_agima.svg');
-  background-position: center;
+  background-color: #ffffff80;
+  background-size: 0% 0%;
+  background-position: 50% 50%;
   background-repeat: no-repeat;
-  background-size: cover;
 
   display: flex;
   flex-direction: column;
@@ -346,6 +376,12 @@ export default defineComponent({
 
   border-radius: 8px;
   box-shadow: 0px 16px 64px rgba(0, 0, 0, 0.08);
+
+  position: relative;
+  transition: background-size 0.5s;
+  &.animated {
+    background-size: 100% 100%;
+  }
 
   .audio-player__button {
     background-color: var(--color-primary);
@@ -369,6 +405,12 @@ export default defineComponent({
 
   .audio-player__song {
     font: var(--font-l);
+  }
+
+  .audio-player__cover {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
   }
 
   .audio-player__audio {

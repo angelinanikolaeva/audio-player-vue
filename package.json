@@ -1,7 +1,7 @@
 {
   "name": "audio-player",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "dev": "vite",
     "build:prod": "vite build --mode production",

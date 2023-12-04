@@ -9,7 +9,7 @@ import { routes } from './app/providers/router';
 
 const router = createRouter({
   routes,
-  history: createWebHistory(),
+  history: createWebHistory('/audio-player-vue/'),
 });
 
 const app = createApp(App);

@@ -1,0 +1,8 @@
+@import 'reset';
+@import 'vars/global';
+@import 'themes/main';
+
+#app {
+  font: var(--font-m);
+  min-height: 100vh;
+}

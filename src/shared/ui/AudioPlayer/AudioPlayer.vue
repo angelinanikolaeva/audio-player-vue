@@ -227,6 +227,7 @@ export default defineComponent({
       playUpdate();
     };
     const onAudioEnded = () => {
+      playUpdate();
       clearTimer();
       playNextAudio();
     };

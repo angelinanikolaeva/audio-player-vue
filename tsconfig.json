@@ -2,9 +2,9 @@
   "compilerOptions": {
     "outDir": "./build/",
     "noImplicitAny": true,
+    "jsx": "preserve",
+    "target": "ESNext",
     "module": "ESNext",
-    "target": "es5",
-    "jsx": "react-jsx",
     "allowJs": true,
     "strict": true,
     "moduleResolution": "node",
@@ -16,6 +16,6 @@
     "allowSyntheticDefaultImports": true,
     "isolatedModules": true
   },
-  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/.vue"],
+  "include": ["./src/**/*.ts", "./src/**/*.tsx", "./src/**/*.vue"],
   "exclude": ["./build", "./node_modules"]
 }

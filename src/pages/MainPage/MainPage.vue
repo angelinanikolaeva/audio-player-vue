@@ -64,11 +64,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .main_page {
-  background-image: url('@/shared/assets/icons/background_agima.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-
   min-height: 100vh;
 
   display: flex;

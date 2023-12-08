@@ -1,4 +1,5 @@
 This is an Audio Player Vue project.
+https://angelinanikolaeva.github.io/audio-player-vue/
 
 Как запустить:
 pnpm i
